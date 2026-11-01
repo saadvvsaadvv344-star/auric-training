@@ -1,0 +1,46 @@
+name: Auric v2 training
+# Auric v2 (private material, ENCRYPTED with the secret AURIC_KEY) - one ~5.6 h piece per run, the next run continues.
+# On/off: control.json ("v2": true / false). It stops by itself when the training is finished.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "35 */6 * * *"
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: v2-training
+  cancel-in-progress: false
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Is it switched on (and not finished)?
+        id: on
+        run: echo "on=$(python3 -c 'import json;print(str(json.load(open("control.json")).get("v2",True)).lower())')" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.on.outputs.on == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install (processor-only PyTorch)
+        if: steps.on.outputs.on == 'true'
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install "transformers>=4.46" peft safetensors accelerate cryptography
+      - name: Train
+        id: train
+        if: steps.on.outputs.on == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AURIC_KEY: ${{ secrets.AURIC_KEY }}
+          AURIC_MINUTES: "335"
+        run: python -u v2_cloud.py
+      - name: Start the next run (unless finished)
+        if: steps.on.outputs.on == 'true' && success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! curl -s "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/status/v2.json" | grep -q '"phase": "finished'; then
+            gh workflow run v2.yml --repo "$GITHUB_REPOSITORY"
+          fi

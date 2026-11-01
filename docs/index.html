@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auric Cloud Training</title>
+<meta name="description" content="Live progress of Auric's AIs training on GitHub's free computers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%233ee8ff' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%233ee8ff'/%3E%3C/svg%3E">
+<style>
+:root { --bg: #050a14; --panel: rgba(14, 26, 46, .72); --line: rgba(110, 190, 255, .18); --text: #e6f0ff; --muted: #8aa2c4;
+  --a: #3ee8ff; --b: #8f7bff; --ok: #4dffa6; --warn: #ffc15e; --bad: #ff6b81; color-scheme: dark; }
+:root[data-theme="light"] { --bg: #f4f7fc; --panel: rgba(255, 255, 255, .85); --line: rgba(40, 80, 160, .16); --text: #0f1b30;
+  --muted: #5b6b86; --a: #0a84c9; --b: #6a4fe0; color-scheme: light; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #f4f7fc; --panel: rgba(255, 255, 255, .85);
+  --line: rgba(40, 80, 160, .16); --text: #0f1b30; --muted: #5b6b86; --a: #0a84c9; --b: #6a4fe0; color-scheme: light; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.55 "Segoe UI", system-ui, sans-serif; min-height: 100vh; }
+body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .5;
+  background: radial-gradient(700px 400px at 15% -5%, color-mix(in srgb, var(--a) 22%, transparent), transparent 70%),
+              radial-gradient(600px 400px at 95% 10%, color-mix(in srgb, var(--b) 20%, transparent), transparent 70%); }
+main { position: relative; max-width: 1080px; margin: 0 auto; padding: 32px 16px 60px; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; justify-content: space-between; margin-bottom: 8px; }
+h1 { margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: .02em; }
+h1 span { background: linear-gradient(90deg, var(--a), var(--b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sub { color: var(--muted); margin: 4px 0 24px; max-width: 760px; }
+.live { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+  color: var(--muted); font-size: 13px; background: var(--panel); }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); animation: pulse 2s infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; align-items: start; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; backdrop-filter: blur(10px); }
+.card h2 { margin: 0; font-size: 19px; display: flex; align-items: center; gap: 10px; }
+.what { color: var(--muted); font-size: 14px; margin: 6px 0 14px; }
+.pill { margin-left: auto; font-size: 11.5px; font-weight: 600; letter-spacing: .04em; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.pill.run { color: var(--a); border-color: color-mix(in srgb, var(--a) 50%, transparent); }
+.pill.done { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
+.pill.wait { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, transparent); }
+.bar { height: 10px; border-radius: 6px; background: color-mix(in srgb, var(--a) 12%, transparent); overflow: hidden; margin: 6px 0 4px; }
+.bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--a), var(--b));
+  transition: width 1s cubic-bezier(.2, .8, .2, 1); box-shadow: 0 0 12px color-mix(in srgb, var(--a) 60%, transparent); }
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 14px; }
+.num { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.num small { display: block; color: var(--muted); font-size: 12px; }
+.num b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.phase { font-size: 13px; color: var(--muted); margin-top: 10px; }
+figure { margin: 16px 0 0; }
+figure img { width: 100%; image-rendering: pixelated; border-radius: 12px; border: 1px solid var(--line); background: #000; display: block; }
+figcaption { color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+section { margin-top: 30px; }
+section > h2 { font-size: 20px; margin: 0 0 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
+.scroll { overflow-x: auto; }
+.lock { display: inline-flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--ok); margin-top: 10px; }
+.can { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.can .card h3 { margin: 0 0 6px; font-size: 16px; }
+.can .card p { margin: 0; color: var(--muted); font-size: 14px; }
+.tag { display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 999px; margin-bottom: 8px; font-weight: 600; }
+.tag.yes { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+.tag.no { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
+.tag.pc { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn); }
+a { color: var(--a); }
+footer { margin-top: 36px; color: var(--muted); font-size: 13px; }
+button.theme { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.empty { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1><span>Auric</span> · Cloud training</h1>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="live"><i></i><span id="updated">connecting…</span></span>
+      <button class="theme" id="theme" type="button" aria-label="Light or dark">◐</button>
+    </div>
+  </header>
+  <p class="sub">Saad's AIs learn here on GitHub's free computers (4 processor cores each, 6-hour runs that continue one after
+    the other), so the PC's graphics card stays free. Without a graphics card it's slower: about 3–7 days for Auric v2 and
+    2–3 weeks for the image AI. Progress updates about every 20 minutes during a run.</p>
+
+  <div class="grid">
+    <article class="card" id="art">
+      <h2>🎨 Image AI <span class="pill" data-f="pill">–</span></h2>
+      <p class="what">Auric's own picture generator, built from zero: it learns to draw ~200 kinds of things (cat, car, tree…)
+        from 49,074 real photos, 64×64. A separate judge checks if its pictures really show what was asked.</p>
+      <div class="bar"><i data-f="bar"></i></div>
+      <div class="phase" data-f="steps">–</div>
+      <div class="nums">
+        <div class="num"><small>Error (lower = better)</small><b data-f="loss">–</b></div>
+        <div class="num"><small>Judge recognises</small><b data-f="quality">–</b></div>
+        <div class="num"><small>Time left (cloud)</small><b data-f="left">–</b></div>
+        <div class="num"><small>Run</small><b data-f="run">–</b></div>
+      </div>
+      <p class="phase" data-f="phase"></p>
+      <figure data-f="fig" hidden><img data-f="img" alt="What the image AI draws right now"><figcaption data-f="cap"></figcaption></figure>
+    </article>
+
+    <article class="card" id="v2">
+      <h2>🧠 Auric v2 <span class="pill" data-f="pill">–</span></h2>
+      <p class="what">Auric's own language brain (1.5 billion parameters) learns everything Auric knows: its personality,
+        Saad's lessons, 20,000 teacher answers, answers written from sources, 12 languages.</p>
+      <div class="bar"><i data-f="bar"></i></div>
+      <div class="phase" data-f="steps">–</div>
+      <div class="nums">
+        <div class="num"><small>Error (lower = better)</small><b data-f="loss">–</b></div>
+        <div class="num"><small>Base brain's exam</small><b data-f="exam">–</b></div>
+        <div class="num"><small>Time left (cloud)</small><b data-f="left">–</b></div>
+        <div class="num"><small>Run</small><b data-f="run">–</b></div>
+      </div>
+      <p class="phase" data-f="phase"></p>
+      <span class="lock">🔒 Private: its material and saved states are encrypted; only these numbers are public.</span>
+    </article>
+  </div>
+
+  <section>
+    <h2>What can be trained</h2>
+    <div class="can">
+      <div class="card"><span class="tag yes">In the cloud</span><h3>🎨 Image AI</h3>
+        <p>Trains here for as long as its pictures keep getting better (checked by the judge every 10,000 steps).</p></div>
+      <div class="card"><span class="tag yes">In the cloud</span><h3>🧠 Auric v2</h3>
+        <p>Trains here, encrypted. At the end Saad's PC compares it with the current Auric v2 and keeps it only if it does better.</p></div>
+      <div class="card"><span class="tag pc">Learns on the PC</span><h3>🤖 JARVIS (Qwen3 30B)</h3>
+        <p>Too big to retrain (it would need ~60 GB of graphics memory). It learns from experience instead: every mistake and
+          every correction becomes a lesson it applies next time.</p></div>
+      <div class="card"><span class="tag no">Not trained</span><h3>⌨ Coding brain (Qwen3-Coder 30B)</h3>
+        <p>Used as it is: an expert model downloaded for writing code. Too big to retrain on free machines.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Runs</h2>
+    <div class="scroll"><table><thead><tr><th>AI</th><th>Run</th><th>Steps</th><th>Error</th><th>Result</th><th>Ended</th></tr></thead>
+      <tbody id="runs"><tr><td colspan="6" class="empty">No finished run yet.</td></tr></tbody></table></div>
+  </section>
+
+  <footer>Source and every run: <a id="repo" href="#">the repository</a> · <a id="actions" href="#">the runs on GitHub Actions</a>.
+    Built by Auric for Saad.</footer>
+</main>
+<script>
+"use strict";
+const REPO = "saadvvsaadvv344-star/auric-training";
+const RAW = `https://raw.githubusercontent.com/${REPO}/status/`;
+document.getElementById("repo").href = `https://github.com/${REPO}`;
+document.getElementById("actions").href = `https://github.com/${REPO}/actions`;
+const $ = (card, f) => document.querySelector(`#${card} [data-f="${f}"]`);
+const fmt = (n) => (n == null ? "–" : Number(n).toLocaleString("en"));
+const ago = (iso) => {
+  if (!iso) return "never";
+  const m = Math.round((Date.now() - Date.parse(iso)) / 60000);
+  return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 2880 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} days ago`;
+};
+const hours = (h) => (h == null ? "–" : h < 1 ? `${Math.round(h * 60)} min` : h < 72 ? `${h.toFixed(1)} h` : `${(h / 24).toFixed(1)} days`);
+async function get(name, json = true) {
+  try {
+    const r = await fetch(RAW + name + "?t=" + Math.floor(Date.now() / 60000), { cache: "no-store" });
+    if (!r.ok) return null;
+    return json ? r.json() : r.blob();
+  } catch { return null; }
+}
+function pill(card, s) {
+  const el = $(card, "pill");
+  const fresh = s && s.updated && Date.now() - Date.parse(s.updated) < 45 * 60000;
+  const phase = (s && s.phase) || "";
+  const [cls, txt] = !s ? ["", "not started"] : /^finished/.test(phase) ? ["done", "finished"]
+    : fresh && /training|learning/.test(phase) ? ["run", "training now"] : ["wait", "between runs"];
+  el.className = `pill ${cls}`; el.textContent = txt;
+}
+let lastImg = "";
+async function refresh() {
+  const [art, v2, artRuns, v2Runs, cap] = await Promise.all([get("art.json"), get("v2.json"), get("art_history.json"),
+    get("v2_history.json"), get("art_samples.json")]);
+  pill("art", art); pill("v2", v2);
+  if (art) {
+    $("art", "bar").style.width = `${Math.min(100, 100 * art.step / art.planned)}%`;
+    $("art", "steps").textContent = `Step ${fmt(art.step)} of ${fmt(art.planned)} planned (${(100 * art.step / art.planned).toFixed(1)}%) · ${art.sec_per_step} s per step · batch ${art.batch}`;
+    $("art", "loss").textContent = art.loss ?? "–";
+    $("art", "quality").textContent = art.best_quality >= 0 ? `${Math.round(art.best_quality * 100)}%` : "not measured yet";
+    $("art", "left").textContent = hours(art.cloud_hours_left);
+    $("art", "run").textContent = fmt(art.run);
+    $("art", "phase").textContent = `${art.phase} · updated ${ago(art.updated)}`;
+    const blob = await get("art_samples.png", false);
+    if (blob && blob.type.startsWith("image")) {
+      const url = URL.createObjectURL(blob);
+      $("art", "img").src = url; if (lastImg) URL.revokeObjectURL(lastImg); lastImg = url;
+      $("art", "fig").hidden = false;
+      $("art", "cap").textContent = cap ? `What it draws at step ${fmt(cap.step)} (left to right, top to bottom): ${(cap.kinds || []).join(", ")}` : "";
+    }
+  }
+  if (v2) {
+    $("v2", "bar").style.width = `${Math.min(100, 100 * v2.step / v2.total)}%`;
+    $("v2", "steps").textContent = `Step ${fmt(v2.step)} of ${fmt(v2.total)} (${(100 * v2.step / v2.total).toFixed(1)}%) · ${fmt(v2.examples)} examples · ${v2.sec_per_step} s per step`;
+    $("v2", "loss").textContent = v2.loss ?? "–";
+    $("v2", "exam").textContent = v2.exam_base ? v2.exam_base.toFixed(3) : "–";
+    $("v2", "left").textContent = hours(v2.cloud_hours_left);
+    $("v2", "run").textContent = fmt(v2.run);
+    $("v2", "phase").textContent = `${v2.phase} · updated ${ago(v2.updated)}`;
+  }
+  const rows = [...(artRuns || []).map((r) => ({ ...r, ai: "🎨 Image AI" })), ...(v2Runs || []).map((r) => ({ ...r, ai: "🧠 Auric v2" }))]
+    .sort((a, b) => Date.parse(b.ended) - Date.parse(a.ended)).slice(0, 40);
+  if (rows.length) {
+    document.getElementById("runs").innerHTML = rows.map((r) => `<tr><td>${r.ai}</td><td>${fmt(r.run)}</td>
+      <td>${fmt(r.from)} → ${fmt(r.to)}</td><td>${r.loss ?? "–"}</td>
+      <td>${r.exam_after != null ? `exam ${r.exam_after} (base ${Number(r.exam_base).toFixed(3)})` : r.best_quality >= 0 ? `judge ${Math.round(r.best_quality * 100)}%` : "–"}</td>
+      <td>${ago(r.ended)}</td></tr>`).join("");
+  }
+  const newest = [art, v2].filter(Boolean).map((s) => s.updated).sort().pop();
+  document.getElementById("updated").textContent = newest ? `last news ${ago(newest)}` : "waiting for the first run";
+}
+refresh();
+setInterval(refresh, 60000);
+const root = document.documentElement;
+try { const t = localStorage.getItem("auric-train-theme"); if (t) root.dataset.theme = t; } catch {}
+document.getElementById("theme").onclick = () => {
+  const dark = (root.dataset.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")) === "dark";
+  root.dataset.theme = dark ? "light" : "dark";
+  try { localStorage.setItem("auric-train-theme", root.dataset.theme); } catch {}
+};
+</script>
+</body>
+</html>

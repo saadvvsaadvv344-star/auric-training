@@ -1,0 +1,41 @@
+name: Image AI training
+# One ~5.6 h piece of training per run on GitHub's free machine; each run starts the next one when it ends, and the
+# schedule below starts one too if the chain ever breaks. On/off: control.json ("art": true / false).
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "5 */6 * * *"
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: art-training
+  cancel-in-progress: false
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Is it switched on?
+        id: on
+        run: echo "on=$(python3 -c 'import json;print(str(json.load(open("control.json")).get("art",True)).lower())')" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-python@v5
+        if: steps.on.outputs.on == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install (processor-only PyTorch)
+        if: steps.on.outputs.on == 'true'
+        run: pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install numpy pillow
+      - name: Train
+        if: steps.on.outputs.on == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AURIC_MINUTES: "335"
+        run: python -u art_cloud.py
+      - name: Start the next run
+        if: steps.on.outputs.on == 'true' && success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run art.yml --repo "$GITHUB_REPOSITORY"
