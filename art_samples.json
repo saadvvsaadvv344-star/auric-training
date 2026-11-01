@@ -1,0 +1,22 @@
+{
+ "step": 2000,
+ "kinds": [
+  "cat",
+  "dog",
+  "car",
+  "tree",
+  "house",
+  "flower",
+  "horse",
+  "mountain",
+  "boat",
+  "apple",
+  "chair",
+  "airplane",
+  "bicycle",
+  "cake",
+  "hamburger",
+  "koala"
+ ],
+ "time": "09:35"
+}
