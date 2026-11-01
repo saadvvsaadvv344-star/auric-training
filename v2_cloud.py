@@ -41,6 +41,10 @@ def material():
 def main():
     from peft import LoraConfig, get_peft_model, get_peft_model_state_dict, set_peft_model_state_dict
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    old = C.read_status("v2.json") or {}
+    if not str(old.get("phase", "")).startswith("finished"):
+        C.publish_status({"v2.json": {**old, "phase": "starting a new run (decrypting the material, loading the brain"
+                                      + (", then the base brain's exam)" if not old else ")"), "updated": now()}})
     train_rows, exam_rows = material()
     tok = AutoTokenizer.from_pretrained(BASE)
     train = [e for e in (V.encode(tok, r) for r in train_rows) if e]

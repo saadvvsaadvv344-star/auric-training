@@ -44,6 +44,9 @@ def load_photos():
 
 
 def main():
+    old = C.read_status("art.json") or {}
+    C.publish_status({"art.json": {**old, "phase": "starting a new run (loading the photos and the saved state)",
+                                   "updated": now()}})
     X, Y, names = load_photos()
     C.download("art_judge.pt", JUDGE)
     if not JUDGE.exists():                                      # first run: the judge (it rates the pictures) learns
