@@ -24,7 +24,6 @@ jobs:
         if: steps.on.outputs.on == 'true'
         with:
           python-version: "3.12"
-          cache: pip
       - name: Install (processor-only PyTorch)
         if: steps.on.outputs.on == 'true'
         run: pip install torch --index-url https://download.pytorch.org/whl/cpu && pip install "transformers>=4.46" peft safetensors accelerate cryptography
