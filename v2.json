@@ -1,5 +1,5 @@
 {
- "phase": "between runs (the next one continues)",
+ "phase": "starting a new run (decrypting the material, loading the brain)",
  "run": 6,
  "step": 419,
  "total": 2034,
@@ -8,5 +8,5 @@
  "loss": 0.8926,
  "exam_base": 1.3043705495198568,
  "cloud_hours_left": 120.5,
- "updated": "2026-11-02T08:56:50+00:00"
+ "updated": "2026-11-02T08:58:03+00:00"
 }
