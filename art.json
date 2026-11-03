@@ -1,16 +1,16 @@
 {
  "phase": "training",
  "run": 12,
- "step": 20506,
+ "step": 20597,
  "planned": 150000,
- "sec_per_step": 13.18,
- "loss": 0.1573,
+ "sec_per_step": 13.21,
+ "loss": 0.1552,
  "best_quality": 0.058333333333333334,
  "best_step": 20000,
  "kinds": 195,
  "photos": 48815,
  "batch": 32,
  "params_m": 27.7,
- "cloud_hours_left": 474.0,
- "updated": "2026-11-03T14:29:07+00:00"
+ "cloud_hours_left": 474.8,
+ "updated": "2026-11-03T14:49:21+00:00"
 }
