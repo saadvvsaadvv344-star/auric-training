@@ -1,5 +1,5 @@
 {
- "phase": "between runs (the next one continues)",
+ "phase": "starting a new run (loading the photos and the saved state)",
  "run": 10,
  "step": 17896,
  "planned": 150000,
@@ -12,5 +12,5 @@
  "batch": 32,
  "params_m": 27.7,
  "cloud_hours_left": 212.2,
- "updated": "2026-11-03T07:46:24+00:00"
+ "updated": "2026-11-03T07:47:10+00:00"
 }
