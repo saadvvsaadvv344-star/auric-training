@@ -1,5 +1,5 @@
 {
- "step": 22000,
+ "step": 24000,
  "kinds": [
   "cat",
   "dog",
@@ -18,5 +18,5 @@
   "hamburger",
   "koala"
  ],
- "time": "19:40"
+ "time": "01:49"
 }
