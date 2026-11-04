@@ -1,5 +1,5 @@
 {
- "phase": "training",
+ "phase": "starting a new run (loading the photos and the saved state)",
  "run": 16,
  "step": 26769,
  "planned": 150000,
@@ -12,5 +12,5 @@
  "batch": 32,
  "params_m": 27.7,
  "cloud_hours_left": 189.8,
- "updated": "2026-11-04T11:13:54+00:00"
+ "updated": "2026-11-04T13:56:33+00:00"
 }
