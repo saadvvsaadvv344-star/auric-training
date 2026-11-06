@@ -1,12 +1,12 @@
 {
  "phase": "learning",
  "run": 25,
- "step": 1989,
+ "step": 1995,
  "total": 2034,
  "examples": 32539,
- "sec_per_step": 275.3,
- "loss": 0.7665,
+ "sec_per_step": 266.1,
+ "loss": 0.7849,
  "exam_base": 1.3043705495198568,
- "cloud_hours_left": 3.4,
- "updated": "2026-11-06T18:16:02+00:00"
+ "cloud_hours_left": 2.9,
+ "updated": "2026-11-06T18:39:36+00:00"
 }
