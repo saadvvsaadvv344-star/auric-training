@@ -1,12 +1,12 @@
 {
- "phase": "starting a new run (decrypting the material, loading the brain)",
+ "phase": "learning",
  "run": 25,
- "step": 2031,
+ "step": 1970,
  "total": 2034,
  "examples": 32539,
- "sec_per_step": 268.1,
- "loss": 0.815,
+ "sec_per_step": 251.5,
+ "loss": 0.8342,
  "exam_base": 1.3043705495198568,
- "cloud_hours_left": 0.2,
- "updated": "2026-11-09T22:40:01+00:00"
+ "cloud_hours_left": 4.5,
+ "updated": "2026-11-09T22:45:46+00:00"
 }
