@@ -1,16 +1,16 @@
 {
- "phase": "starting a new run (loading the photos and the saved state)",
- "run": 40,
- "step": 74651,
+ "phase": "training",
+ "run": 41,
+ "step": 74652,
  "planned": 150000,
- "sec_per_step": 13.39,
- "loss": 0.1532,
+ "sec_per_step": 13.83,
+ "loss": 0.1377,
  "best_quality": 0.08333333333333333,
  "best_step": 50000,
  "kinds": 195,
  "photos": 48815,
  "batch": 32,
  "params_m": 27.7,
- "cloud_hours_left": 280.3,
- "updated": "2026-11-10T03:46:39+00:00"
+ "cloud_hours_left": 289.4,
+ "updated": "2026-11-10T03:47:22+00:00"
 }
